@@ -1,12 +1,9 @@
 // Copyright 2022 Darwin Schuppan <darwin@nobrain.org>
 // SPDX license identifier: MIT
 
-#define GENERIC_IMPL_STATIC
+#define GENERIC_IMPL
 
-#define GENERIC_TYPE int
-#define GENERIC_NAME IntVec
-#define GENERIC_PREFIX int_vec
-#include <ds/generic/vec.h>
+#include "vec.h"
 
 #include <assert.h>
 #include <string.h>

@@ -50,8 +50,10 @@ else \
 fi
 endef
 
+TEST_HDR := generic/vec.h
 TESTS := generic/map generic/smap generic/vec error fmt
 
+_TEST_HDR := $(addprefix tests/,$(TEST_HDR))
 _TESTS := $(addsuffix $(EXE_EXT),$(addprefix tests/,$(TESTS)))
 
 .PHONY: test test_outputs test_leaks test_full test_debug
@@ -77,7 +79,7 @@ else
 	@echo "Options are: $(TESTS)"
 endif
 
-tests/%: tests/%.c ds.a $(_HDR)
+tests/%: tests/%.c ds.a $(_HDR) $(_TEST_HDR)
 	$(CC) -o $@ $< ds.a -I./include $(CFLAGS) $(LDFLAGS)
 
 ################################

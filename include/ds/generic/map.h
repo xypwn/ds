@@ -54,6 +54,8 @@ FUNCDECL(bool, _del)(NAME m, KTYPE key);
 FUNCDECL(Error, _rehash)(NAME *m, size_t new_minimum_cap);
 FUNCDECL(bool, _it_next)(NAME m, ITEM_TYPE **restrict it);
 
+VARDEF(const char *, test_string_lol) = NULL;
+
 #ifdef GENERIC_IMPL
 VARDEF(const char *, __val_fmt) = NULL;
 VARDEF(const char *, __key_fmt) = NULL;
