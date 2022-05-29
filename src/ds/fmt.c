@@ -529,10 +529,9 @@ size_t _fmtsv(const char *restrict file, size_t line, char *restrict buf, size_t
 		.ctx_data = &ctxs,
 		.putc_func = _fmts_putc_func,
 	};
-	memset(buf, 0, size); /* TODO: Remove this without valgrind complaining. */
 	_fmtcv(file, line, &ctx, format, args);
 	if (size > 0)
-		buf[ctxs.written] = 0;
+		buf[ctxs.written < size - 1 ? ctxs.written : size - 1] = 0;
 	return ctxs.written;
 }
 
