@@ -1,3 +1,6 @@
+// Copyright 2022 Darwin Schuppan <darwin@nobrain.org>
+// SPDX license identifier: MIT
+
 #ifndef __DS_NUMBER_H__
 #define __DS_NUMBER_H__
 
