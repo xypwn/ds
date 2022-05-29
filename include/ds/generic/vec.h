@@ -27,8 +27,8 @@
 
 #ifndef _GENERIC_VEC_ONCE
 #define _GENERIC_VEC_ONCE
-size_t vec_len(void *v);
-size_t vec_cap(void *v);
+size_t vec_len(const void *v);
+size_t vec_cap(const void *v);
 #endif
 
 typedef TYPE *NAME;
@@ -38,10 +38,8 @@ VARDECL(const char *, __val_fmt);
 FUNCDECL(NAME, )();
 FUNCDECL(void, _term)(NAME v);
 FUNCDECL(void, _fmt_register)(const char *val_fmt);
-static inline FUNCDEF(size_t, _len)(NAME v) { return vec_len((void*)v); }
-static inline FUNCDEF(size_t, _cap)(NAME v) { return vec_cap((void*)v); }
-FUNCDECL(size_t, _len)(NAME v);
-FUNCDECL(size_t, _cap)(NAME v);
+static inline FUNCDEF(size_t, _len)(const NAME v) { return vec_len((const void*)v); }
+static inline FUNCDEF(size_t, _cap)(const NAME v) { return vec_cap((const void*)v); }
 FUNCDECL(Error, _fit)(NAME *v, size_t new_minimum_cap);
 FUNCDECL(Error, _push)(NAME *v, TYPE val);
 FUNCDECL(TYPE, _pop)(NAME v);
@@ -60,11 +58,11 @@ typedef struct _VecHeader {
 	size_t cap, len;
 } _VecHeader;
 
-size_t vec_len(void *v) {
+size_t vec_len(const void *v) {
 	return v == NULL ? 0 : _VEC_HEADER(v)->len;
 }
 
-size_t vec_cap(void *v) {
+size_t vec_cap(const void *v) {
 	return v == NULL ? 0 : _VEC_HEADER(v)->cap;
 }
 #endif
