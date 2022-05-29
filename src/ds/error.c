@@ -2,6 +2,7 @@
 // SPDX license identifier: MIT
 
 #include <ds/error.h>
+#include <ds/number.h>
 
 void *error_reserved_for_error = NULL;
 
@@ -20,37 +21,25 @@ void error_term() {
 size_t error_to_string(char *buf, size_t size, Error e, bool destroy) {
 	size_t written = 0;
 	if (e.has_location) {
-		size_t left = size > written ? size - written : 0;
-		written += snprintf(buf + written, left, "%s:%zu: ", e.file, e.line);
+		written += snprintf(buf + written, sub_clamped(size, written), "%s:%zu: ", e.file, e.line);
 	}
 	switch (e.kind) {
-		case ErrorNone: {
-				size_t left = size > written ? size - written : 0;
-				written += snprintf(buf + written, left, "Success");
-			}
+		case ErrorNone:
+			written += snprintf(buf + written, sub_clamped(size, written), "Success");
 			break;
-		case ErrorOutOfMemory: {
-				size_t left = size > written ? size - written : 0;
-				written += snprintf(buf + written, left, "Out of memory");
-			}
+		case ErrorOutOfMemory:
+			written += snprintf(buf + written, sub_clamped(size, written), "Out of memory");
 			break;
 		case ErrorString: {
-				size_t left = size > written ? size - written : 0;
-				written += snprintf(buf + written, left, "%s", e.str);
-				if (e.str_on_heap && destroy)
-					free(e.str);
+			written += snprintf(buf + written, sub_clamped(size, written), "%s", e.str);
+			if (e.str_on_heap && destroy)
+				free(e.str);
 			}
 			break;
 	}
 	if (e.has_annex) {
-		{
-			size_t left = size > written ? size - written : 0;
-			written += snprintf(buf + written, left, ": ");
-		}
-		{
-			size_t left = size > written ? size - written : 0;
-			written += error_to_string(buf + written, left, *e.annex, destroy);
-		}
+		written += snprintf(buf + written, sub_clamped(size, written), ": ");
+		written += error_to_string(buf + written, sub_clamped(size, written), *e.annex, destroy);
 		if (destroy)
 			free(e.annex);
 	}

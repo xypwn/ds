@@ -4,6 +4,7 @@
 #define GENERIC_IMPL_STATIC
 
 #include <ds/fmt.h>
+#include <ds/number.h>
 #include <ds/types.h>
 
 #include <stdio.h>
@@ -531,7 +532,7 @@ size_t _fmtsv(const char *restrict file, size_t line, char *restrict buf, size_t
 	};
 	_fmtcv(file, line, &ctx, format, args);
 	if (size > 0)
-		buf[ctxs.written < size - 1 ? ctxs.written : size - 1] = 0;
+		buf[min(ctxs.written, size - 1)] = 0;
 	return ctxs.written;
 }
 
