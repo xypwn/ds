@@ -46,7 +46,7 @@ FUNCDECL(TYPE *, _get)(NAME m, const char *key);
 FUNCDECL(Error, _set)(NAME *m, const char *key, TYPE val);
 FUNCDECL(bool, _del)(NAME m, const char *key);
 FUNCDECL(Error, _rehash)(NAME *m, size_t new_minimum_cap);
-FUNCDECL(bool, _it_next)(NAME m, ITEM_TYPE **it);
+FUNCDECL(bool, _it_next)(NAME m, ITEM_TYPE **restrict it);
 
 #ifdef GENERIC_IMPL
 VARDEF(const char *, __val_fmt) = NULL;
@@ -198,7 +198,7 @@ FUNCDEF(Error, _rehash)(NAME *m, size_t new_minimum_cap) {
 	return OK();
 }
 
-FUNCDEF(bool, _it_next)(NAME m, ITEM_TYPE **it) {
+FUNCDEF(bool, _it_next)(NAME m, ITEM_TYPE **restrict it) {
 	*it == NULL ? *it = m.data : (*it)++;
 	while (*it < m.data + m.cap && (!(*it)->key || (*it)->key == TOMBSTONE)) { (*it)++; }
 	return *it < m.data + m.cap;

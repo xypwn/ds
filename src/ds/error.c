@@ -18,7 +18,7 @@ void error_term() {
 	free(error_reserved_for_error);
 }
 
-size_t error_to_string(char *buf, size_t size, Error e, bool destroy) {
+size_t error_to_string(char *restrict buf, size_t size, Error e, bool destroy) {
 	size_t written = 0;
 	if (e.has_location) {
 		written += snprintf(buf + written, sub_clamped(size, written), "%s:%zu: ", e.file, e.line);
@@ -66,7 +66,7 @@ Error *_error_heapify(Error e) {
 	return res;
 }
 
-Error _error_hereify(const char *file, size_t line, Error e) {
+Error _error_hereify(const char *restrict file, size_t line, Error e) {
 	e.has_location = true;
 	e.file = file;
 	e.line = line;

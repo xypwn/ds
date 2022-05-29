@@ -272,7 +272,7 @@ static void _fmts_putc_func(FmtContext *restrict ctx, char c) {
 /********************************\
 |* The guts of any fmt function *|
 \********************************/
-static Error _fmt_main(bool use_err_location, const char *file, size_t line, FmtContext *ctx, const char *restrict format, va_list args) {
+static Error _fmt_main(bool use_err_location, const char *restrict file, size_t line, FmtContext *restrict ctx, const char *restrict format, va_list args) {
 	if (!initialized) {
 		const char *err_str = "fmt: fmt_init() must be called at the beginning of the program before using any other fmt functions, and fmt_term() must be called when done\n";
 		return use_err_location ? ERROR_STRING_LOCATION(file, line, err_str) : ERROR_STRING(err_str);
@@ -506,7 +506,7 @@ void fmt_register(const char *restrict keyword, FmtPrintFunc print_func) {
 	_print_func_map_set(&_print_funcs, keyword, print_func);
 }
 
-void _fmtv(const char *file, size_t line, const char *restrict format, va_list args) {
+void _fmtv(const char *restrict file, size_t line, const char *restrict format, va_list args) {
 	FmtContext ctx = {
 		.ctx_data = stdout,
 		.putc_func = _fmtf_putc_func,
@@ -514,7 +514,7 @@ void _fmtv(const char *file, size_t line, const char *restrict format, va_list a
 	_fmtcv(file, line, &ctx, format, args);
 }
 
-void _fmt(const char *file, size_t line, const char *restrict format, ...) {
+void _fmt(const char *restrict file, size_t line, const char *restrict format, ...) {
 	va_list args;
 	va_start(args, format);
 	_fmtv(file, line, format, args);
@@ -544,11 +544,11 @@ size_t _fmts(const char *restrict file, size_t line, char *restrict buf, size_t 
 	return res;
 }
 
-void _fmtcv(const char *restrict file, size_t line, FmtContext *ctx, const char *restrict format, va_list args) {
+void _fmtcv(const char *restrict file, size_t line, FmtContext *restrict ctx, const char *restrict format, va_list args) {
 	ERROR_ASSERT(_fmt_main(true, file, line, ctx, format, args));
 }
 
-void _fmtc(const char *restrict file, size_t line, FmtContext *ctx, const char *restrict format, ...) {
+void _fmtc(const char *restrict file, size_t line, FmtContext *restrict ctx, const char *restrict format, ...) {
 	va_list args;
 	va_start(args, format);
 	_fmtcv(file, line, ctx, format, args);

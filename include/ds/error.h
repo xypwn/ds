@@ -80,7 +80,7 @@ typedef struct Error {
 /* Returns true if the given error structure actually contains a real error. */
 static inline bool error_is(Error e) { return e.kind != ErrorNone; }
 /* Same as error_is but takes a pointer and does NULL checking. */
-static inline bool error_ptr_is(Error *e) { return e != NULL && e->kind != ErrorNone; }
+static inline bool error_ptr_is(Error *restrict e) { return e != NULL && e->kind != ErrorNone; }
 
 /* Call this at the beginning of any program that makes use of any of the more
  * advanced error features (those which involve heap allocation). */
@@ -92,9 +92,9 @@ void error_term();
 #include <ds/fmt.h>;
 fmt("%{Error:destroy}", err);
 */
-size_t error_to_string(char *buf, size_t size, Error e, bool destroy);
+size_t error_to_string(char *restrict buf, size_t size, Error e, bool destroy);
 
 Error *_error_heapify(Error e);
-Error _error_hereify(const char *file, size_t line, Error e);
+Error _error_hereify(const char *restrict file, size_t line, Error e);
 
 #endif
