@@ -576,5 +576,9 @@ void fmt_init() {
 }
 
 void fmt_term() {
+	if (!initialized) {
+		ERROR_ASSERT(ERROR_STRING("fmt: fmt_term() called while fmt uninitialized"));
+	}
+	initialized = false;
 	_print_func_map_term(_print_funcs);
 }
