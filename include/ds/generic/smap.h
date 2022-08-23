@@ -108,9 +108,10 @@ FUNCDEF(NAME, )() {
 }
 
 FUNCDEF(void, _term)(NAME m) {
-	for (size_t i = 0; i < m.cap; i++) {
-		if (m.data[i].key && m.data[i].key != TOMBSTONE)
-			free(m.data[i].key);
+	ITEM_TYPE *it = NULL;
+	while (FUNC(_it_next)(m, &it)) {
+		GENERIC_TERM_ITEM((it->val));
+		free(it->key);
 	}
 	free(m.data);
 }
@@ -162,6 +163,7 @@ FUNCDEF(bool, _del)(NAME m, const char *key) {
 	size_t i = _fnv1a32(key, strlen(key)) & (m.cap - 1);
 	while (m.data[i].key) {
 		if (m.data[i].key != TOMBSTONE && strcmp(m.data[i].key, key) == 0) {
+			GENERIC_TERM_ITEM((m.data[i].val));
 			free(m.data[i].key);
 			m.data[i].key = TOMBSTONE;
 			return true;

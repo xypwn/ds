@@ -1,6 +1,8 @@
 // Copyright 2022 Darwin Schuppan <darwin@nobrain.org>
 // SPDX license identifier: MIT
 
+#undef GENERIC_TERM_ITEM
+
 #if defined(GENERIC_TYPE)
 #undef TYPE
 #undef GENERIC_TYPE

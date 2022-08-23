@@ -88,6 +88,9 @@ FUNCDEF(NAME, )() {
 }
 
 FUNCDEF(void, _term)(NAME v) {
+	for (size_t i = 0; i < vec_len(v); i++) {
+		GENERIC_TERM_ITEM((v[i]));
+	}
 	free(_VEC_HEADER(v));
 }
 
@@ -126,7 +129,10 @@ FUNCDEF(Error, _push)(NAME *v, TYPE val) {
 }
 
 FUNCDEF(TYPE, _pop)(NAME v) {
-	return v[--_VEC_HEADER(v)->len];
+	TYPE val = v[_VEC_HEADER(v)->len-1];
+	GENERIC_TERM_ITEM((val));
+	_VEC_HEADER(v)->len--;
+	return val;
 }
 
 FUNCDEF(TYPE *, _back)(NAME v) {
@@ -135,6 +141,7 @@ FUNCDEF(TYPE *, _back)(NAME v) {
 
 FUNCDEF(TYPE, _del)(NAME v, size_t idx) {
 	TYPE val = v[idx];
+	GENERIC_TERM_ITEM((val));
 	memmove(v + idx, v + idx + 1, sizeof(TYPE) * (--_VEC_HEADER(v)->len - idx));
 	return val;
 }

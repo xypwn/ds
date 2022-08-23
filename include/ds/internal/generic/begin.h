@@ -68,3 +68,7 @@
 #if defined(GENERIC_KEY_TYPE)
 #define KTYPE GENERIC_KEY_TYPE
 #endif
+
+#ifndef GENERIC_TERM_ITEM
+#define GENERIC_TERM_ITEM(_itm)
+#endif

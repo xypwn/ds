@@ -116,6 +116,10 @@ FUNCDEF(NAME, )() {
 }
 
 FUNCDEF(void, _term)(NAME m) {
+	ITEM_TYPE *it = NULL;
+	while (FUNC(_it_next)(m, &it)) {
+		GENERIC_TERM_ITEM((it->val));
+	}
 	free(m.data);
 }
 
@@ -163,6 +167,7 @@ FUNCDEF(bool, _del)(NAME m, KTYPE key) {
 	size_t i = _fnv1a32(&key, sizeof(KTYPE)) & (m.cap - 1);
 	while (m.data[i].state != EMPTY) {
 		if (m.data[i].state != TOMBSTONE && memcmp(&m.data[i].key, &key, sizeof(KTYPE)) == 0) {
+			GENERIC_TERM_ITEM((m.data[i].val));
 			m.data[i].state = TOMBSTONE;
 			return true;
 		}
